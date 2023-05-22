@@ -4,10 +4,77 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather</title>
     <script src="main.js" defer></script>
 </head>
 <body>
-    
+    <div class="header">
+        <input id="cityInput" type="text" placeholder="Search for a city">
+        <button id="searchButton"><img src="../src/icons/search.png" height="14px" width="auto"></button>
+    </div>
+    <div class="content">
+        <div class="mainContent">
+            <p id="cityName">city name</p>
+            <p id="currentTemp">22</p>
+        </div>
+        <div class="forecast">
+            <table>
+                <tr>
+                    <th colspan="5">
+                        Weekly Forecast
+                    </th>
+                </tr>
+                <tr>
+                    <td class="day">Monday</td>
+                    <td class="weatherIcon">cloud icon</td>
+                    <td class="rainChance">rain%</td>
+                    <td class="tempDay">tempDay</td>
+                    <td class="tempNight">tempNight</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td>cloud icon</td>
+                    <td>rain%</td>
+                    <td>tempDay</td>
+                    <td>tempNight</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

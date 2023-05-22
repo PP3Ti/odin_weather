@@ -9,29 +9,21 @@ module.exports = {
   },
   module: {
     rules: [
-        {
-          test: /\.s[ac]ss$/i,
-          use: [
-            {
-              loader: 'style-loader',
-            }, {
-              loader: 'css-loader',
-            }, {
-              loader: 'sass-loader',
-            }
-          ]
-        },
-        {
-          test: /\.(jpg|png|svg|gif)$/,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 8192,
-              },
-            },
-          ],
-        },
-    ]
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.(jpg|png|svg|gif)$/,
+        type: 'asset/resource',
+      },
+    ],
   },
 };
