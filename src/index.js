@@ -1,7 +1,9 @@
 import './styles.sass'
 import { getDay, parseISO } from 'date-fns'
+import weatherCondition from './weather_conditions.json' assert { type: 'json' }
 
 const searchButton = document.getElementById('searchButton')
+const cityInput = document.getElementById('cityInput')
 
 let APIobj
 
@@ -46,6 +48,16 @@ function getDaysOfDates(dates) {
   }
   return dates
 }
+function getIconUrl(weather) {
+  let code = weather.day.condition.code
+  let conditionObj = weatherCondition.find(e => e.code === code)
+  let iconCode = conditionObj.icon
+  if (APIobj.current.is_day === 1) {
+    return `../src/icons/day/${iconCode}.png`
+  } else {
+    return `../src/icons/night/${iconCode}.png`
+  }
+}
 function updateElements() {
   const cityName = document.getElementById('cityName')
   const currentTemp = document.getElementById('currentTemp')
@@ -58,19 +70,20 @@ function updateElements() {
   const rainChances = document.querySelectorAll('.rainChance')
   const tempsDay = document.querySelectorAll('.tempDay')
   const tempsNight = document.querySelectorAll('.tempNight')
+  const precipitations = document.querySelectorAll('.precipitation')
 
   for (let i = 0; i < days.length; i++) {
     days[i].textContent = getDaysOfDates(getStringDates())[i]
-    /*const icon = document.createElement('img')
-    icon.src = APIobj.forecast.forecastday[i].day.condition.icon
-    weatherIcons[i].appendChild(icon) */
     rainChances[i].textContent = `${APIobj.forecast.forecastday[i].day.daily_chance_of_rain}%`
     tempsDay[i].textContent = `${APIobj.forecast.forecastday[i].day.maxtemp_c}°C`
     tempsNight[i].textContent = `${APIobj.forecast.forecastday[i].day.mintemp_c}°C`
+    precipitations[i].textContent = `${APIobj.forecast.forecastday[i].day.totalprecip_mm}mm`
+
+    weatherIcons[i].replaceChildren()
+    const weatherIcon = document.createElement('img')
+    weatherIcon.src = getIconUrl(APIobj.forecast.forecastday[i])
+    weatherIcons[i].appendChild(weatherIcon)
   }
-
-
-
 }
 function setTheme() {
   const body = document.querySelector('body')
@@ -80,6 +93,12 @@ function setTheme() {
     body.classList.remove('night')
   }
 }
+cityInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault()
+    searchButton.click()
+  }
+})
 searchButton.addEventListener('click', async () => {
   await getJson(getUserInput())
   setTheme()

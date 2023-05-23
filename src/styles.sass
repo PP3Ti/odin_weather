@@ -9,7 +9,6 @@ body
   display: grid
   grid-template: 120px 1fr / 1fr
   background-image: url('./backgrounds/daySky.jpg')
-  background-repeat: no-repeat
   background-size: cover
 
   p
@@ -83,18 +82,20 @@ body
 
       table
         width: 85%
-        border-spacing: 15px
 
         tbody tr
           box-shadow: 0 1px 0 0 rgba($darkcolor, 0.4)
   
         th
           text-align: left
-          font-size: 35px
+          font-size: 40px
 
         td
           font-size: 25px
-          padding: 5px
+
+          img
+            height: 64px
+            width: auto
 
         td:last-child
           width: 0
