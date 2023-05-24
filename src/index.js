@@ -58,6 +58,16 @@ function getIconUrl(weather) {
     return `../src/icons/night/${iconCode}.png`
   }
 }
+function getIconUrlHourly(APIobj, time) {
+  let code = APIobj.forecast.forecastday[0].hour[time].condition.code
+  let conditionObj = weatherCondition.find(e => e.code === code)
+  let iconCode = conditionObj.icon
+  if (APIobj.current.is_day === 1) {
+    return `../src/icons/day/${iconCode}.png`
+  } else {
+    return `../src/icons/night/${iconCode}.png`
+  }
+}
 function updateElements() {
   const cityName = document.getElementById('cityName')
   const currentTemp = document.getElementById('currentTemp')
@@ -75,13 +85,14 @@ function updateElements() {
   for (let i = 0; i < days.length; i++) {
     days[i].textContent = getDaysOfDates(getStringDates())[i]
     rainChances[i].textContent = `${APIobj.forecast.forecastday[i].day.daily_chance_of_rain}%`
-    tempsDay[i].textContent = `${APIobj.forecast.forecastday[i].day.maxtemp_c}°C`
+    tempsDay[i].textContent = `${APIobj.forecast.forecastday[i].day.maxtemp_c}°C /`
     tempsNight[i].textContent = `${APIobj.forecast.forecastday[i].day.mintemp_c}°C`
     precipitations[i].textContent = `${APIobj.forecast.forecastday[i].day.totalprecip_mm}mm`
 
     weatherIcons[i].replaceChildren()
     const weatherIcon = document.createElement('img')
     weatherIcon.src = getIconUrl(APIobj.forecast.forecastday[i])
+    weatherIcon.alt = 'icon representing weather'
     weatherIcons[i].appendChild(weatherIcon)
   }
 }
@@ -93,6 +104,63 @@ function setTheme() {
     body.classList.remove('night')
   }
 }
+function getHourlyTemps(APIobj) {
+  let temps = []
+  APIobj.forecast.forecastday[0].hour.forEach(hour => temps.push(hour.temp_c))
+  return temps
+}
+function getHours() {
+  let hours = []
+  for (let i = 0; i < 24; i++) {
+    hours.push(`${i}:00`)
+  }
+  return hours
+}
+function getHourlyPrecipitationChance(APIobj) {
+  let precipitationChance = []
+  APIobj.forecast.forecastday[0].hour.forEach(hour => precipitationChance.push(hour.chance_of_rain))
+  return precipitationChance
+}
+function makeToday(APIobj) {
+  const hours = getHours()
+  let temps = getHourlyTemps(APIobj)
+  let precipitationChances = getHourlyPrecipitationChance(APIobj)
+  const hourDivs = document.querySelector('.hourDivs')
+  const todayDiv = document.querySelector('.today')
+
+  todayDiv.replaceChildren()
+  hourDivs.replaceChildren()
+
+  for (let i = 0; i < hours.length; i++) {
+    const hourDiv = document.createElement('div')
+    const hour = document.createElement('div')
+    const weahterIconHour = document.createElement('img')
+    const tempHour = document.createElement('div')
+    const chanceToRainHour = document.createElement('div')
+
+    const rainDropIcon = document.createElement('img')
+    const chanceToRainHourPercent = document.createElement('div')
+
+    rainDropIcon.src = '../src/icons/raindrop.png'
+    rainDropIcon.alt = 'raindrop symbol'
+
+    hourDiv.classList.add('hourDiv')
+    hour.classList.add('hour')
+    weahterIconHour.classList.add('weatherIconHour')
+    tempHour.classList.add('tempHour')
+    chanceToRainHour.classList.add('chanceToRainHour')
+
+    weahterIconHour.src = getIconUrlHourly(APIobj, i)
+    hour.textContent = hours[i]
+    tempHour.textContent = `${temps[i]}°C`
+    chanceToRainHourPercent.textContent = `${precipitationChances[i]}%`
+    chanceToRainHour.append(rainDropIcon, chanceToRainHourPercent)
+
+    hourDiv.append(hour, weahterIconHour, tempHour, chanceToRainHour)
+    hourDivs.append(hourDiv)
+  }
+  todayDiv.append(hourDivs)
+}
 cityInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault()
@@ -101,11 +169,52 @@ cityInput.addEventListener('keypress', (e) => {
 })
 searchButton.addEventListener('click', async () => {
   await getJson(getUserInput())
+  console.log(APIobj)
   setTheme()
   updateElements()
-  console.log(APIobj)
+  makeToday(APIobj)
 })
+
+
+const todayDivContainer = document.querySelector('.hourDivs')
+/*let pos = {left: 0, x: 0}
+function mouseDownHandler(e) {
+  todayDivContainer.addEventListener('mouseleave', mouseUpHandler)
+  pos = {
+    left: todayDivContainer.scrollLeft,
+    x: e.clientX
+  }
+
+  document.addEventListener('mousemove', mouseMoveHandler)
+  document.addEventListener('mouseup', mouseUpHandler)
+
+  function mouseMoveHandler(e) {
+    const dx = e.clientX - pos.x
+    todayDivContainer.scrollLeft = pos.left - dx
+  }
+  function mouseUpHandler() {
+    document.removeEventListener('mousemove', mouseMoveHandler)
+    document.removeEventListener('mouseup', mouseUpHandler)
+  }
+}
+todayDivContainer.addEventListener('mousedown', mouseDownHandler)*/
+
+
+function horizontalScroll(e) {
+  e = window.event || e
+  let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))
+  todayDivContainer.scrollLeft -= (delta * 167)
+  e.preventDefault()
+}
+todayDivContainer.addEventListener('wheel', horizontalScroll)
+
+
+
+
 
 await getJson('budapest')
 updateElements()
 setTheme()
+makeToday(APIobj)
+console.log(APIobj)
+

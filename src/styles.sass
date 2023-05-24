@@ -1,4 +1,4 @@
-$lightcolor: #cccccc
+$lightcolor: #dadada
 $darkcolor: #121212
   
 body
@@ -10,6 +10,7 @@ body
   grid-template: 120px 1fr / 1fr
   background-image: url('./backgrounds/daySky.jpg')
   background-size: cover
+  background-attachment: fixed
 
   p
     margin: 0
@@ -74,6 +75,49 @@ body
         margin-top: 15px
         font-size: 120px
 
+    .today
+      display: flex
+      flex-direction: column
+      margin-bottom: 60px
+
+      .hourDivs 
+        width: 830px
+        display: flex
+        flex-wrap: nowrap
+        flex-grow: 0
+        overflow: auto
+        gap: 5px
+
+        .hourDiv
+          flex-shrink: 0
+          height: 150px
+          width: 150px
+          border: 1px solid $darkcolor
+          border-radius: 8px
+          display: flex
+          flex-direction: column
+          align-items: center
+          justify-content: space-evenly
+          padding: 5px
+
+          .weatherIconHour
+            height: 64px
+            width: 64px
+            margin: -10px
+            pointer-events: none
+            
+          .chanceToRainHour
+            display: flex
+            align-items: center
+            justify-content: center
+            padding: 0
+            transform: translate(-3px)
+
+            img
+              pointer-events: none
+              height: 48px
+              width: 48px
+              margin: -10px 
 
     .forecast
       width: clamp(700px, 100%, 1000px)
@@ -81,7 +125,7 @@ body
       justify-content: center
 
       table
-        width: 85%
+        width: 75%
 
         tbody tr
           box-shadow: 0 1px 0 0 rgba($darkcolor, 0.4)
@@ -92,14 +136,24 @@ body
 
         td
           font-size: 25px
-
+        
+        .weatherIcon
           img
-            height: 64px
-            width: auto
+            margin: -5px
+        
+        .precipitation, .rainChance
+          font-size: 22px
 
-        td:last-child
+        .tempDay
+          text-align: right
+
+        .tempNight
+          font-size: 18px
+
+        td:nth-child(5), td:last-child
           width: 0
           white-space: nowrap
+          padding-left: 5px
 
         td:last-of-type
           padding-right: 0
@@ -115,3 +169,8 @@ body
 
   tbody tr
     box-shadow: 0 1px 0 0 rgba($lightcolor, 0.4)
+
+  .today
+    .hourDivs
+     .hourDiv
+        border: 1px solid $lightcolor
