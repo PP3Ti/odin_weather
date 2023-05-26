@@ -6,6 +6,7 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    assetModuleFilename: 'images/[hash][ext][query]'
   },
   module: {
     rules: [
@@ -22,7 +23,7 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg|gif)$/,
-        type: 'asset/resource',
+        type: 'asset/source',
       },
     ],
   },

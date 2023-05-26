@@ -200,4 +200,3 @@ const firstLoad = (async () => {
   makeToday(APIobj)
   setTodayDivScrollbar(getCurrentHour(APIobj), todayDivContainer)
 })()
-
