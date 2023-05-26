@@ -1,7 +1,6 @@
 import './styles.sass'
 import { getDay, parseISO } from 'date-fns'
 import weatherCondition from './weather_conditions.json' assert { type: 'json' }
-import icons from './icons'
 
 let APIobj
 
@@ -61,9 +60,9 @@ function getIconUrlHourly(APIobj, time) {
   let conditionObj = weatherCondition.find(e => e.code === code)
   let iconCode = conditionObj.icon
   if (APIobj.current.is_day === 1) {
-    return `../src/icons/day/${iconCode}.png`
+    return `./icons/day/${iconCode}.png`
   } else {
-    return `../src/icons/night/${iconCode}.png`
+    return `./icons/night/${iconCode}.png`
   }
 }
 function updateElements() {
@@ -148,7 +147,7 @@ function makeToday(APIobj) {
     tempHour.classList.add('tempHour')
     chanceToRainHour.classList.add('chanceToRainHour')
 
-    weahterIconHour.src = `url(${getIconUrlHourly(APIobj, i)})`
+    weahterIconHour.src = getIconUrlHourly(APIobj, i)
     hour.textContent = hours[i]
     tempHour.textContent = `${temps[i]}°C`
     chanceToRainHourPercent.textContent = `${precipitationChances[i]}%`

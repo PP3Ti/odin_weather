@@ -1,4 +1,5 @@
-const path = require('path');
+const path = require('path')
+const CopyPlugin = require("copy-webpack-plugin")
 
 module.exports = {
   mode: 'development',
@@ -8,6 +9,14 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     assetModuleFilename: 'images/[hash][ext][query]'
   },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: "src/icons", to: "icons" },
+        { from: "src/backgrounds", to: "backgrounds" },
+      ],
+    }),
+  ],
   module: {
     rules: [
       {
@@ -23,7 +32,7 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg|gif)$/,
-        type: 'asset/source',
+        type: 'asset',
       },
     ],
   },
