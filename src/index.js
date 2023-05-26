@@ -2,9 +2,6 @@ import './styles.sass'
 import { getDay, parseISO } from 'date-fns'
 import weatherCondition from './weather_conditions.json' assert { type: 'json' }
 
-const searchButton = document.getElementById('searchButton')
-const cityInput = document.getElementById('cityInput')
-
 let APIobj
 
 function getUserInput() {
@@ -161,60 +158,46 @@ function makeToday(APIobj) {
   }
   todayDiv.append(hourDivs)
 }
-cityInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
+function getCurrentHour(APIobj) {
+  return Number(Array.from(APIobj.location.localtime).slice(-5, -3).join(''))
+}
+function setTodayDivScrollbar(currentHour, divToScroll) {
+  const delta = 167
+  divToScroll.scrollLeft = 0
+  divToScroll.scrollLeft += currentHour * delta
+}
+
+const firstLoad = (async () => {
+  const searchButton = document.getElementById('searchButton')
+  const cityInput = document.getElementById('cityInput')
+  const todayDivContainer = document.querySelector('.hourDivs')
+
+  function horizontalScroll(e) {
+    e = window.event || e
+    let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))
+    todayDivContainer.scrollLeft -= (delta * 167)
     e.preventDefault()
-    searchButton.click()
   }
-})
-searchButton.addEventListener('click', async () => {
-  await getJson(getUserInput())
-  console.log(APIobj)
-  setTheme()
+  todayDivContainer.addEventListener('wheel', horizontalScroll)
+  cityInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      searchButton.click()
+    }
+  })
+  searchButton.addEventListener('click', async () => {
+    await getJson(getUserInput())
+    console.log(APIobj)
+    setTheme()
+    updateElements()
+    makeToday(APIobj)
+    setTodayDivScrollbar(getCurrentHour(APIobj), todayDivContainer)
+  })
+
+  await getJson('budapest')
   updateElements()
+  setTheme()
   makeToday(APIobj)
-})
-
-
-const todayDivContainer = document.querySelector('.hourDivs')
-/*let pos = {left: 0, x: 0}
-function mouseDownHandler(e) {
-  todayDivContainer.addEventListener('mouseleave', mouseUpHandler)
-  pos = {
-    left: todayDivContainer.scrollLeft,
-    x: e.clientX
-  }
-
-  document.addEventListener('mousemove', mouseMoveHandler)
-  document.addEventListener('mouseup', mouseUpHandler)
-
-  function mouseMoveHandler(e) {
-    const dx = e.clientX - pos.x
-    todayDivContainer.scrollLeft = pos.left - dx
-  }
-  function mouseUpHandler() {
-    document.removeEventListener('mousemove', mouseMoveHandler)
-    document.removeEventListener('mouseup', mouseUpHandler)
-  }
-}
-todayDivContainer.addEventListener('mousedown', mouseDownHandler)*/
-
-
-function horizontalScroll(e) {
-  e = window.event || e
-  let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))
-  todayDivContainer.scrollLeft -= (delta * 167)
-  e.preventDefault()
-}
-todayDivContainer.addEventListener('wheel', horizontalScroll)
-
-
-
-
-
-await getJson('budapest')
-updateElements()
-setTheme()
-makeToday(APIobj)
-console.log(APIobj)
+  setTodayDivScrollbar(getCurrentHour(APIobj), todayDivContainer)
+})()
 
