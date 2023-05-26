@@ -50,9 +50,9 @@ function getIconUrl(weather) {
   let conditionObj = weatherCondition.find(e => e.code === code)
   let iconCode = conditionObj.icon
   if (APIobj.current.is_day === 1) {
-    return `../src/icons/day/${iconCode}.png`
+    return `./icons/day/${iconCode}.png`
   } else {
-    return `../src/icons/night/${iconCode}.png`
+    return `./icons/night/${iconCode}.png`
   }
 }
 function getIconUrlHourly(APIobj, time) {
