@@ -1,6 +1,7 @@
 import './styles.sass'
 import { getDay, parseISO } from 'date-fns'
 import weatherCondition from './weather_conditions.json' assert { type: 'json' }
+import icons from './icons'
 
 let APIobj
 
@@ -138,7 +139,7 @@ function makeToday(APIobj) {
     const rainDropIcon = document.createElement('img')
     const chanceToRainHourPercent = document.createElement('div')
 
-    rainDropIcon.src = '../src/icons/raindrop.png'
+    rainDropIcon.src = './icons/raindrop.png'
     rainDropIcon.alt = 'raindrop symbol'
 
     hourDiv.classList.add('hourDiv')
@@ -147,7 +148,7 @@ function makeToday(APIobj) {
     tempHour.classList.add('tempHour')
     chanceToRainHour.classList.add('chanceToRainHour')
 
-    weahterIconHour.src = getIconUrlHourly(APIobj, i)
+    weahterIconHour.src = `url(${getIconUrlHourly(APIobj, i)})`
     hour.textContent = hours[i]
     tempHour.textContent = `${temps[i]}°C`
     chanceToRainHourPercent.textContent = `${precipitationChances[i]}%`
