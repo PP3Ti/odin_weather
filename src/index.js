@@ -8,7 +8,7 @@ function getUserInput() {
   return document.getElementById('cityInput').value
 }
 async function getJson(city) {
-  await fetch (`https://api.weatherapi.com/v1/forecast.json?key=6af6b71308c846c582175142232105&q=${city}&days=7&aqi=no&alerts=no`, {mode: 'cors'})
+  await fetch (`https://api.weatherapi.com/v1/forecast.json?key=6af6b71308c846c582175142232105&q=${city}&days=3&aqi=no&alerts=no`, {mode: 'cors'})
   .then (response => {
     return response.json()
   })
